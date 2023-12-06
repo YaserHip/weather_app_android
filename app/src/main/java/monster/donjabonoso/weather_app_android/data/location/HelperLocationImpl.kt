@@ -9,9 +9,11 @@ import android.location.LocationManager
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.Priority.PRIORITY_BALANCED_POWER_ACCURACY
+import com.google.android.gms.tasks.CancellationTokenSource
 import kotlinx.coroutines.suspendCancellableCoroutine
 import monster.donjabonoso.weather_app_android.domain.location.HelperLocation
 import javax.inject.Inject
+import kotlin.coroutines.resume
 
 class HelperLocationImpl @Inject constructor(
     private val locationClient: FusedLocationProviderClient,
@@ -35,7 +37,16 @@ class HelperLocationImpl @Inject constructor(
         }
 
         return suspendCancellableCoroutine { cont ->
-            locationClient.getCurrentLocation(PRIORITY_BALANCED_POWER_ACCURACY, )
+            locationClient.getCurrentLocation(PRIORITY_BALANCED_POWER_ACCURACY, CancellationTokenSource().token).apply {
+                if (isComplete) {
+                    if (isSuccessful){
+                        cont.resume(result)
+                    } else {
+                        cont.resume(null)
+                    }
+                    return@suspendCancellableCoroutine
+                }
+            }
 
         }
     }
