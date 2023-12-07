@@ -18,7 +18,7 @@ import kotlin.coroutines.resume
 class HelperLocationImpl @Inject constructor(
     private val locationClient: FusedLocationProviderClient,
     private val app: Application
-): HelperLocation{
+) : HelperLocation {
     override suspend fun getCurrentLocation(): Location? {
         val hasAccessFineLocationPermission = ContextCompat.checkSelfPermission(
             app,
@@ -32,19 +32,23 @@ class HelperLocationImpl @Inject constructor(
         val locationManager = app.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val isGpsEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) ||
                 locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-        if(!hasAccessCoarseLocationPermission || !hasAccessFineLocationPermission || !isGpsEnabled) {
+        if (!hasAccessCoarseLocationPermission || !hasAccessFineLocationPermission || !isGpsEnabled) {
             return null
         }
 
         return suspendCancellableCoroutine { cont ->
-            locationClient.getCurrentLocation(PRIORITY_BALANCED_POWER_ACCURACY, CancellationTokenSource().token).apply {
-                if (isComplete) {
-                    if (isSuccessful){
-                        cont.resume(result)
-                    } else {
-                        cont.resume(null)
-                    }
-                    return@suspendCancellableCoroutine
+            locationClient.getCurrentLocation(
+                PRIORITY_BALANCED_POWER_ACCURACY,
+                CancellationTokenSource().token
+            ).apply {
+                addOnSuccessListener {
+                    cont.resume(it)
+                }
+                addOnFailureListener {
+                    cont.resume(null)
+                }
+                addOnCanceledListener {
+                    cont.cancel()
                 }
             }
 
