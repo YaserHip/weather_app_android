@@ -15,7 +15,7 @@ import monster.donjabonoso.weather_app_android.domain.location.HelperLocation
 import javax.inject.Inject
 import kotlin.coroutines.resume
 
-class HelperLocationImpl @Inject constructor(
+class ImplHelperLocation @Inject constructor(
     private val locationClient: FusedLocationProviderClient,
     private val app: Application
 ) : HelperLocation {

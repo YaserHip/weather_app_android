@@ -19,7 +19,7 @@ data class WeatherCurrentDto(
     @field:Json(name = "last_updated")
     val lastUpdated: String,
     @field:Json(name = "temp_c")
-    val temp: String,
+    val temp: Double,
     val condition: WeatherConditionDto,
     val humidity: Double,
     @field:Json(name = "feelslike_c")

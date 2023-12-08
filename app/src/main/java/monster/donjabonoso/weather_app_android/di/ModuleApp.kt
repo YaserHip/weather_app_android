@@ -1,8 +1,12 @@
 package monster.donjabonoso.weather_app_android.di
 
+import android.app.Application
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.HiltAndroidApp
 import dagger.hilt.components.SingletonComponent
 import monster.donjabonoso.weather_app_android.data.remote.Api
 import retrofit2.Retrofit
@@ -21,5 +25,11 @@ object ModuleApp {
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
             .create()
+    }
+
+    @Provides
+    @Singleton
+    fun providerFusedLocationProviderClient(app: Application): FusedLocationProviderClient {
+        return LocationServices.getFusedLocationProviderClient(app)
     }
 }
