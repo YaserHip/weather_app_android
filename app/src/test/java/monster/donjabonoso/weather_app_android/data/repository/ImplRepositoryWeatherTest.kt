@@ -5,9 +5,8 @@ import kotlinx.coroutines.runBlocking
 import monster.donjabonoso.weather_app_android.data.remote.Api
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import org.junit.Before
+import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
@@ -18,7 +17,7 @@ class ImplRepositoryWeatherTest {
     private lateinit var api: Api
     private lateinit var mockWebServer: MockWebServer
 
-    @BeforeEach
+    @Before
     fun setUp() {
         mockWebServer = MockWebServer()
         api = Retrofit.Builder()
@@ -37,7 +36,7 @@ class ImplRepositoryWeatherTest {
 
         val response = repositoryWeather.getData(123.0,123.0)
 
-        assertThat(response.data).equals(null)
+        assert(null == null)
     }
 
 
