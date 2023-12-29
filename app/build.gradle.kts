@@ -72,8 +72,10 @@ dependencies {
     //retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.3")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
+    testImplementation("com.squareup.retrofit2:retrofit:2.9.0")
+    testImplementation("com.squareup.retrofit2:converter-moshi:2.9.0")
     testImplementation("com.willowtreeapps.assertk:assertk:0.26.1")
     testImplementation("io.mockk:mockk:1.12.5")
     testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
