@@ -64,6 +64,8 @@ dependencies {
 
     //hilt
     implementation("com.google.dagger:hilt-android:2.50")
+    implementation("com.google.android.gms:play-services-contextmanager:9.4.0")
+    testImplementation("junit:junit:4.13.2")
     kapt("com.google.dagger:hilt-compiler:2.50")
 
     testImplementation("com.google.dagger:hilt-android-testing:2.50")

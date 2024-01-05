@@ -1,42 +1,64 @@
 package monster.donjabonoso.weather_app_android.data.repository
 
+import io.mockk.coEvery
+import io.mockk.mockk
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.runBlocking
 import monster.donjabonoso.weather_app_android.data.remote.Api
-import okhttp3.OkHttpClient
-import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
-import org.junit.Before
+import monster.donjabonoso.weather_app_android.data.remote.WeatherConditionDto
+import monster.donjabonoso.weather_app_android.data.remote.WeatherCurrentDto
+import monster.donjabonoso.weather_app_android.data.remote.WeatherDto
+import monster.donjabonoso.weather_app_android.data.remote.WeatherLocationDto
+import monster.donjabonoso.weather_app_android.domain.Resource
+import monster.donjabonoso.weather_app_android.domain.weather.Weather
 import org.junit.Test
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+
 
 class ImplRepositoryWeatherTest {
-    private val mockWebServer = MockWebServer()
-    private val client = OkHttpClient.Builder().build()
-    private lateinit var repositoryWeather: ImplRepositoryWeather
-    private lateinit var api: Api
+    private val mockApi = mockk<Api>()
+    private val repository = ImplRepositoryWeather(mockApi)
 
+    @Test
+    fun `test getData with successful response`() = runBlocking {
+        // Mocked data
+        val mockLatitude = 40.0
+        val mockLongitude = -73.0
 
-    @Before
-    fun setUp() {
-        api = Retrofit.Builder()
-            .baseUrl(mockWebServer.url("/"))
-            .client(client)
-            .addConverterFactory(MoshiConverterFactory.create())
-            .build()
-            .create(Api::class.java)
+        // Mocked WeatherDto
+        val mockWeatherLocationDto = WeatherLocationDto("City", "Region", "Country", "LocalTime")
+        val mockWeatherConditionDto = WeatherConditionDto("Text", "Icon", 200)
+        val mockWeatherCurrentDto = WeatherCurrentDto("2023-01-01", 25.0, mockWeatherConditionDto, 70.0, 23.0, 5.0)
+        val mockWeatherDto = WeatherDto(mockWeatherLocationDto, mockWeatherCurrentDto)
 
-        repositoryWeather = ImplRepositoryWeather(api)
+        // Stubbing the behavior of the mocked API getCurrentWeather function
+        coEvery { mockApi.getCurrentWeather(any(), any()) } returns mockWeatherDto
+
+        // Call the method being tested
+        val result = repository.getData(mockLatitude, mockLongitude)
+
+        // Verify the result
+        val expectedWeather = Weather("City", "Icon", 25.0, 23.0, 70.0, 5.0)
+        assertTrue(result is Resource.Success)
+        assertEquals((result as Resource.Success).data, expectedWeather)
     }
 
     @Test
-    fun `Error response 404`() = runBlocking {
-        mockWebServer.enqueue(
-            MockResponse().setResponseCode(404)
-        )
+    fun `test getData with exception`() = runBlocking {
+        // Mocked data
+        val mockLatitude = 40.0
+        val mockLongitude = -73.0
+        val errorMessage = "Test error message"
+        val exception = Exception(errorMessage)
 
-        val response = repositoryWeather.getData(123.0,123.0)
+        // Stubbing the behavior of the mocked API getCurrentWeather function to throw an exception
+        coEvery { mockApi.getCurrentWeather(any(),any()) } throws exception
 
-        assert(true)
+        // Call the method being tested
+        val result = repository.getData(mockLatitude, mockLongitude)
+
+        // Verify the result
+        assertTrue(result is Resource.Error)
+        assertEquals((result as Resource.Error).message, errorMessage)
     }
 }
