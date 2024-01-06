@@ -1,4 +1,4 @@
-package monster.donjabonoso.weather_app_android
+package monster.donjabonoso.weather_app_android.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

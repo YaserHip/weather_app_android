@@ -28,7 +28,8 @@ class ImplRepositoryWeatherTest {
         // Mocked WeatherDto
         val mockWeatherLocationDto = WeatherLocationDto("City", "Region", "Country", "LocalTime")
         val mockWeatherConditionDto = WeatherConditionDto("Text", "Icon", 200)
-        val mockWeatherCurrentDto = WeatherCurrentDto("2023-01-01", 25.0, mockWeatherConditionDto, 70.0, 23.0, 5.0)
+        val mockWeatherCurrentDto =
+            WeatherCurrentDto("2023-01-01", 25.0, mockWeatherConditionDto, 70.0, 23.0, 5.0)
         val mockWeatherDto = WeatherDto(mockWeatherLocationDto, mockWeatherCurrentDto)
 
         // Stubbing the behavior of the mocked API getCurrentWeather function
@@ -52,7 +53,7 @@ class ImplRepositoryWeatherTest {
         val exception = Exception(errorMessage)
 
         // Stubbing the behavior of the mocked API getCurrentWeather function to throw an exception
-        coEvery { mockApi.getCurrentWeather(any(),any()) } throws exception
+        coEvery { mockApi.getCurrentWeather(any(), any()) } throws exception
 
         // Call the method being tested
         val result = repository.getData(mockLatitude, mockLongitude)
