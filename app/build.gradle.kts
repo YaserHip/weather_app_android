@@ -58,6 +58,8 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
 
     //location
     implementation("com.google.android.gms:play-services-location:21.0.1")
@@ -74,13 +76,8 @@ dependencies {
     //retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
-    testImplementation("com.squareup.retrofit2:retrofit:2.9.0")
-    testImplementation("com.squareup.retrofit2:converter-moshi:2.9.0")
-    testImplementation("com.willowtreeapps.assertk:assertk:0.26.1")
     testImplementation("io.mockk:mockk:1.12.5")
-    testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
 
     testImplementation("junit:junit:4.13.2")
