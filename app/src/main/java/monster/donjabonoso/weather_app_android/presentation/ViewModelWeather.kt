@@ -25,14 +25,15 @@ class ViewModelWeather @Inject constructor(
             state = state.copy(isLoading = true, error = null)
 
             helperLocation.getCurrentLocation()?.let { location ->
-               when(val result = repository.getData(location.latitude, location.longitude)) {
-                   is Resource.Success -> {
-                       state = state.copy(isLoading = false, weather = result.data)
-                   }
-                   is Resource.Error -> {
-                       state = state.copy(isLoading = false, error = result.message)
-                   }
-               }
+                state = when(val result = repository.getData(location.latitude, location.longitude)) {
+                    is Resource.Success -> {
+                        state.copy(isLoading = false, weather = result.data)
+                    }
+
+                    is Resource.Error -> {
+                        state.copy(isLoading = false, error = result.message)
+                    }
+                }
             } ?: run {
                 state = state.copy(isLoading = false, error = "Permission denied")
             }
