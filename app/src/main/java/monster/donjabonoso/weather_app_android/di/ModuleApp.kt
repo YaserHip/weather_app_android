@@ -21,7 +21,7 @@ object ModuleApp {
     @Singleton
     fun providerApi():Api{
         return Retrofit.Builder()
-            .baseUrl("http://api.weatherapi.com/v1")
+            .baseUrl("https://api.weatherapi.com/v1/")
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
             .create()
